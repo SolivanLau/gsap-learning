@@ -1,0 +1,5 @@
+@use "./functions" as *;
+.wrapper {
+    max-width: min(100% - #{rem(32)}, 1280px);
+    margin-inline: auto;
+}

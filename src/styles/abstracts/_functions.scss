@@ -1,0 +1,11 @@
+@use "sass:math";
+// REM FUNCTION
+// example usage: font-size: @include rem(16px); output: 1rem;
+// variable usage: --variable-name #{rem(16)} -> 1rem
+@function rem($pixel) {
+    @if math.is-unitless($pixel) {
+        @return math.div($pixel, 16) + rem;
+    } @else {
+        @error "The rem() mixin only accepts unitless values. Value #{$pixel} was passed.";
+    }
+}

@@ -1,16 +1,9 @@
 ---
-
+import PageLayout from "../layouts/PageLayout.astro";
 ---
 
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <meta name="viewport" content="width=device-width" />
-        <meta name="generator" content={Astro.generator} />
-        <title>Astro</title>
-    </head>
-    <body>
+<PageLayout>
+    <main class="wrapper test-css">
         <h1>Learning GSAP</h1>
         <p>
             This is a concurrent learning project learning the GSAP learning library with vanilla
@@ -24,6 +17,7 @@
             </li>
             <li>We will go through the basics of GSAP with basic typescript.</li>
             <li>this project uses prettier and eslint for formatting and linting.</li>
+            <li>Light usage of SASS is in use, mostly for normalize and global styles.</li>
         </ul>
-    </body>
-</html>
+    </main>
+</PageLayout>
