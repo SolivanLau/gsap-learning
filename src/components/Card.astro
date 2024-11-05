@@ -1,0 +1,74 @@
+---
+interface Props {
+    class?: string;
+    titleTag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+    iconBgColor?: "grey" | "red" | "green" | "blue" | "orange" | "purple" | "pink";
+    [key: string]: any;
+}
+
+const { titleTag = "h2", iconBgColor, class: className, ...rest } = Astro.props;
+const TitleTag = titleTag;
+---
+
+<article class:list={["card", className]} {...rest}>
+    <!-- ICON -->
+    <div class:list={["card__icon", `card__icon--${iconBgColor}`]}>
+        <slot name="icon" />
+    </div>
+    <!-- TEXT -->
+    <div class="card__text">
+        <TitleTag class="card__title"><slot name="title" /></TitleTag>
+        <p>Install for websies and HTML ads</p>
+    </div>
+</article>
+
+<style lang="scss">
+    @use "../styles/abstracts" as *;
+    .card {
+        --_card-bg-color: var(--clr-zinc-800);
+        background-color: var(--_card-bg-color);
+        border-radius: var(--bdr-radius);
+        padding: #{rem(8)};
+        display: flex;
+        gap: #{rem(24)};
+    }
+
+    .card__icon {
+        --_icon-bg-color: transparent;
+        display: grid;
+        place-items: center;
+        width: fit-content;
+        padding: #{rem(12)};
+        border-radius: var(--bdr-radius);
+        background-color: var(--_icon-bg-color);
+    }
+
+    // ICON BG MODIFIERS
+    .card__icon--grey {
+        --_icon-bg-color: var(--clr-zinc-700);
+    }
+    .card__icon--red {
+        --_icon-bg-color: var(--clr-red-500);
+    }
+    .card__icon--green {
+        --_icon-bg-color: var(--clr-green-500);
+    }
+    .card__icon--blue {
+        --_icon-bg-color: var(--clr-blue-500);
+    }
+    .card__icon--orange {
+        --_icon-bg-color: var(--clr-orange-500);
+    }
+    .card__icon--purple {
+        --_icon-bg-color: var(--clr-purple-500);
+    }
+    .card__icon--pink {
+        --_icon-bg-color: var(--clr-pink-500);
+    }
+
+    // TEXT
+    .card__title {
+    }
+    .card__text {
+    }
+</style>

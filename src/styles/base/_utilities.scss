@@ -1,5 +1,34 @@
-@use "./functions" as *;
+@use "../abstracts" as *;
+// WRAPPER
+// container class for limiting max width and centering horizontal elements.
+
+// EXAMPLE USAGE:
+// <div class="wrapper">...</div> --> child elements limited max width and centered
 .wrapper {
-    max-width: min(100% - #{rem(32)}, 1280px);
+    --_wrapper-gutter: #{rem(32)};
+    --_wrapper-max-width: 1280px;
+    max-width: min(100% - var(--_wrapper-gutter), 1280px);
     margin-inline: auto;
+}
+.wrapper-lg {
+    --_wrapper-max-width: 1440px;
+}
+.wrapper-sm {
+    --_wrapper-max-width: 800px;
+}
+
+// FLOW
+// provides natural looking vertical rhythm and spacing for child text elements.
+
+// use the local variable `--_flow-space` to customize spacing for specific elements.
+
+// EXAMPLE USAGE:
+// <div class="flow"><h1>...</h1><p>...</p></div> --> all child elements are spaced by 1em by default
+
+// EXAMPLE USAGE: custom space
+// <div class="flow"><h1>...</h1><p>...</p></div> -->
+// p{--_flow-space: 2em;} --> all p child elements are spaced by 2em. rest of the elements are spaced by 1em by default.
+.flow > * + * {
+    --_flow-space: 1em;
+    margin-block-start: var(--_flow-space, 1em);
 }

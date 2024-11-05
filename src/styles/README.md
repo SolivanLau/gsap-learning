@@ -1,5 +1,15 @@
 # Styles
 
+## Table of Contents
+
+-   [🚀 Getting Started](#-getting-started)
+-   [🏗️ Style Structure](#️-style-structure)
+    -   [Global Styles](#global-styles)
+    -   [Scoped Styles](#scoped-styles)
+-   [📝 Style Patterns](#-style-patterns)
+    -   [Naming Conventions](#naming-conventions)
+    -   [CSS Variables](#css-variables)
+
 ## 🚀 Getting Started
 
 This learning project uses SCSS throughout for styling with Astro's builtin support for CSS processors through Vite.
@@ -9,6 +19,8 @@ For **strict package managers**, ensure that SCSS is installed as a dev dependen
 ```sh
 pnpm add -D sass
 ```
+
+Use the standard develop command with `dev` to start the development server. Please make sure to check the Style [structure](#style-structure) and [patterns](#style-patterns) to stay organized. You are ready to start styling!
 
 ## 🏗️ Style Structure
 
@@ -50,7 +62,7 @@ As general rules:
 -   Scoped styles are stored in `src/components/`, `src/layouts/`, and `src/pages/` files respectively.
 -   styles are occasionally passed down via classname and `...rest` attributes to child elements.
 
-## Patterns
+## 📝 Style Patterns
 
 Here are some common patterns used in this project:
 
@@ -59,7 +71,7 @@ Here are some common patterns used in this project:
 -   **class names** and **ids** are in `camel-case` format.
 -   **BEM** is used for naming blocks, elements and modifiers.
 
-Please avoid nested block and modifier class names with scss `&` operator. Although convenient, it is difficult to maintain. **Flatten BEM Declarations** for easier organization andreadability.
+Please avoid nested block and modifier class names with scss `&` operator. Although convenient, it is difficult to maintain. **Flatten BEM Declarations** for easier organization and readability.
 
 #### Nested BEM with `&` Operator 😕
 

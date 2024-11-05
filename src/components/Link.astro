@@ -1,0 +1,25 @@
+---
+interface Props {
+    url: string;
+    external?: boolean;
+    class?: string;
+    preset?: "link--text-light" | "link--text-dark";
+    [key: string]: any;
+}
+
+const { url, external = false, class: className, preset, ...rest } = Astro.props;
+---
+
+<a
+    href={url}
+    target={external ? "_blank" : null}
+    rel={external ? "noreferrer noreferer" : null}
+    class:list={["link", className, preset]}
+    {...rest}
+>
+    <slot />
+</a>
+
+<style lang="scss">
+    
+</style>

@@ -1,9 +1,11 @@
 ---
 import PageLayout from "../layouts/PageLayout.astro";
+import Card from "../components/Card.astro";
+import Gear from "../assets/icons/Gear.astro";
 ---
 
 <PageLayout>
-    <main class="wrapper test-css">
+    <main class="wrapper flow">
         <h1>Learning GSAP</h1>
         <p>
             This is a concurrent learning project learning the GSAP learning library with vanilla
@@ -19,5 +21,10 @@ import PageLayout from "../layouts/PageLayout.astro";
             <li>this project uses prettier and eslint for formatting and linting.</li>
             <li>Light usage of SASS is in use, mostly for normalize and global styles.</li>
         </ul>
+
+        <Card iconBgColor="grey" titleTag="h3">
+            <Gear size={40} slot={"icon"} />
+            <Fragment slot="title">Web Projects</Fragment>
+        </Card>
     </main>
 </PageLayout>

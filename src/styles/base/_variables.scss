@@ -1,4 +1,4 @@
-@use "../abstracts/colors" as *;
+@use "../abstracts" as *;
 // Mapping from colors and fonts in /abstracts
 :root {
     // COLORS
@@ -7,4 +7,11 @@
             --clr-#{$color}-#{$shade}: #{$value};
         }
     }
+
+    // BORDER
+    --bdr-radius: #{rem(12)};
+    // UI
+    --clr-bg: var(--clr-stone-950);
+    --clr-title: var(--clr-neutral-50);
+    --clr-text: var(--clr-stone-300);
 }
