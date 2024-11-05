@@ -1,4 +1,5 @@
 @use "sass:math";
+
 // REM FUNCTION
 // example usage: font-size: @include rem(16px); output: 1rem;
 // variable usage: --variable-name #{rem(16)} -> 1rem
@@ -8,4 +9,26 @@
     } @else {
         @error "The rem() mixin only accepts unitless values. Value #{$pixel} was passed.";
     }
+}
+
+// CLAMP FUNCTION
+// Predictably clamp values based on max/min viewport width values and a desired pixel value
+
+@function clamp-calc($min-size, $max-size, $min-viewport, $max-viewport) {
+    @if not
+        math.is-unitless($min-size) or not
+        math.is-unitless($max-size) or not
+        math.is-unitless($min-viewport) or not
+        math.is-unitless($max-viewport)
+    {
+        @error "The clamp-calc() function only accepts unitless values and assumes it is a pixel value. Values #{$min-size}, #{$max-size}, #{$min-viewport}, and #{$max-viewport} were passed.";
+    }
+    // Calculate the slope
+    $slope: math.div($max-size - $min-size, $max-viewport - $min-viewport);
+
+    // Calculate the y-intercept
+    $y-intercept: $min-size - ($slope * $min-viewport);
+
+    // Return the clamp function
+    @return clamp(#{rem($min-size)}, #{rem($y-intercept)} + #{$slope * 100}vw, #{rem($max-size)});
 }

@@ -12,8 +12,6 @@ html {
 
 body {
     background-color: var(--clr-bg);
-    color: var(--clr-text);
-
     font-family:
         system-ui,
         -apple-system,
@@ -26,15 +24,4 @@ body {
         "Open Sans",
         "Helvetica Neue",
         sans-serif;
-}
-
-// TYPOGRAPHY
-p,
-ul,
-ol,
-a,
-button,
-input {
-    font-size: #{rem(20)};
-    line-height: 1.5;
 }

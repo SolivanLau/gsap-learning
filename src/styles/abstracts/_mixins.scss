@@ -1,25 +1,39 @@
-// RESPONSIVE STYLE MIXIN
+@use "sass:math";
+@use "./functions" as *;
+// BREAKPOINT MIXIN
 // MOBILE FIRST mixin: takes in unitless value. Assumes it is a pixel value and converts it to rem.
-// example usage: @include responsive-style(tablet); (output --> @media (max-width: 768px) { ... })
-// custom breakpoints: @include responsive-style(460px); (output --> @media (max-width: 768px) { ... })
-@mixin responsive-style($breakpoint) {
+// example usage: @include breakpoint(tablet); (output --> @media (max-width: 768px) { ... })
+// custom breakpoints: @include breakpoint(460px); (output --> @media (max-width: 768px) { ... })
+@mixin breakpoint($breakpoint) {
     @if $breakpoint == "mobile" {
-        @media (min-width: #{rem(400px)}) {
+        @media (min-width: #{rem(400)}) {
+            @content;
+        }
+    } @else if ($breakpoint == "tablet-sm") {
+        @media (min-width: #{rem(600)}) {
             @content;
         }
     } @else if ($breakpoint == "tablet") {
-        @media (min-width: #{rem(768px)}) {
+        @media (min-width: #{rem(768)}) {
             @content;
         }
     } @else if ($breakpoint == "desktop") {
-        @media (min-width: #{rem(1000px)}) {
+        @media (min-width: #{rem(1000)}) {
             @content;
         }
     } @else if math.is-unitless($breakpoint) {
-        @media (max-width: #{rem($breakpoint)}) {
+        @media (min-width: #{rem($breakpoint)}) {
             @content;
         }
     } @else {
         @error "The responsive-style mixin only accepts a unitless value or keyword 'mobile', 'tablet', or 'desktop'. Value #{$breakpoint} was passed.";
     }
 }
+
+// PSEUDO ELEMENT MIXIN
+// example usage: @include pseudo; (output --> &:after { ... })
+@mixin pseudo($type: before, $pos: absolute, $content: "") {
+    content: $content;
+    position: $pos;
+}
+

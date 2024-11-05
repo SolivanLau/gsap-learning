@@ -1,17 +1,38 @@
+@use "sass:map";
 @use "../abstracts" as *;
-// Mapping from colors and fonts in /abstracts
+
 :root {
-    // COLORS
+    // COLORS: map from ./abstracts/_colors
     @each $color, $shades in $colors {
         @each $shade, $value in $shades {
             --clr-#{$color}-#{$shade}: #{$value};
         }
     }
-
     // BORDER
     --bdr-radius: #{rem(12)};
     // UI
     --clr-bg: var(--clr-stone-950);
     --clr-title: var(--clr-neutral-50);
-    --clr-text: var(--clr-stone-300);
+    --clr-text: var(--clr-stone-400);
+
+    // FONTS: map from ./abstracts/_fonts
+    @each $size, $breakpoints in $font-sizes {
+        // Mobile and Desktop variables --fs-mobile-xs, --fs-desktop-body
+        @each $breakpoint, $value in $breakpoints {
+            --fs-#{$breakpoint}-#{$size}: #{$value};
+        }
+
+        // Fluid variables
+        $min-viewport: 400;
+        $max-viewport: 1000;
+
+        $mobile-size: map.get($font-sizes, $size, "mobile");
+        $desktop-size: map.get($font-sizes, $size, "desktop");
+        --fs-fluid-#{$size}: #{clamp-calc(
+                $mobile-size,
+                $desktop-size,
+                $min-viewport,
+                $max-viewport
+            )};
+    }
 }

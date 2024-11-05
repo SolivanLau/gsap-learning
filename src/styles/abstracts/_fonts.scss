@@ -1,0 +1,44 @@
+@use "sass:map";
+@use "./functions" as *;
+// values are assumed in pixels
+// typescale is based on minor third
+// mobile starting body size is 16px
+// desktop starting body size is 20px
+$font-sizes: (
+    "xs": (
+        "mobile": 11.11,
+        "desktop": 13.89,
+    ),
+    "sm": (
+        "mobile": 13.33,
+        "desktop": 16.67,
+    ),
+    "body": (
+        "mobile": 16,
+        "desktop": 20,
+    ),
+    "h6": (
+        "mobile": 19.2,
+        "desktop": 24,
+    ),
+    "h5": (
+        "mobile": 23.04,
+        "desktop": 28.8,
+    ),
+    "h4": (
+        "mobile": 27.65,
+        "desktop": 34.56,
+    ),
+    "h3": (
+        "mobile": 33.18,
+        "desktop": 41.47,
+    ),
+    "h2": (
+        "mobile": 39.81,
+        "desktop": 49.77,
+    ),
+    "h1": (
+        "mobile": 47.78,
+        "desktop": 59.72,
+    ),
+);

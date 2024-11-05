@@ -1,4 +1,4 @@
-import type { BaseComponentProps } from "../../components/types";
+import type { BaseComponentProps } from "../types";
 
 // using size to preserve aspect ratio
 interface SizeIconProps extends BaseComponentProps {

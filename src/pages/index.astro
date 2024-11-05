@@ -1,7 +1,9 @@
 ---
 import PageLayout from "../layouts/PageLayout.astro";
 import Card from "../components/Card.astro";
-import Gear from "../assets/icons/Gear.astro";
+import Gear from "../components/icons/Gear.astro";
+import Lightning from "../components/icons/Lightning.astro";
+import Text from "../components/icons/Text.astro";
 ---
 
 <PageLayout>
@@ -22,9 +24,38 @@ import Gear from "../assets/icons/Gear.astro";
             <li>Light usage of SASS is in use, mostly for normalize and global styles.</li>
         </ul>
 
-        <Card iconBgColor="grey" titleTag="h3">
-            <Gear size={40} slot={"icon"} />
-            <Fragment slot="title">Web Projects</Fragment>
-        </Card>
+        <section class="grid grid--col-3">
+            <Card iconBgColor="grey" titleTag="h3">
+                <Gear size={40} slot={"icon"} />
+                <Fragment slot="title">Getting Started</Fragment>
+                <p slot="text">Install for web and ad banners</p>
+            </Card>
+            <Card iconBgColor="orange" titleTag="h3">
+                <Text slot="icon" size={40} />
+                <Fragment slot="title">Text Animations</Fragment>
+                <p slot="text">Split, swipes, and more!</p>
+            </Card>
+            <Card iconBgColor="yellow" titleTag="h3">
+                <Lightning slot="icon" size={40} />
+                <Fragment slot="title">Movements</Fragment>
+                <p slot="text">Translations with timelines</p>
+            </Card>
+        </section>
     </main>
 </PageLayout>
+
+<style lang="scss">
+    @use "../styles/abstracts" as *;
+    .grid {
+        display: grid;
+        gap: #{rem(32)};
+    }
+    .grid--col-3 {
+        @include breakpoint(600) {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        @include breakpoint(desktop) {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+</style>
