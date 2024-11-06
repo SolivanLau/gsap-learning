@@ -34,7 +34,7 @@
 // Predictably clamp values based on max/min viewport width values and a desired pixel value
 
 @function clamp-calc($min-size, $max-size, $min-viewport, $max-viewport) {
-    // Could add type/unit validation here similar to rem()
+    // Number validation
     @if meta.type-of($min-size) !=
         "number" or
         meta.type-of($max-size) !=
@@ -47,9 +47,9 @@
         @error "All parameters must be numbers. Values passed: #{$min-size}, #{$max-size}, #{$min-viewport}, #{$max-viewport}";
     }
 
-    // Could validate that max values are greater than min values
+    // Validate argument order: if max values greater than min values
     @if $max-size < $min-size or $max-viewport < $min-viewport {
-        @error "Max values must be greater than min values";
+        @error "Max values must be greater than min values. Please follow the order: min-size max-size -> min-viewport -> max-viewport";
     }
 
     $min-size: strip-unit($min-size);

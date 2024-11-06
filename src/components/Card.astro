@@ -2,24 +2,34 @@
 import type { HTMLAttributes } from "astro/types";
 
 interface Props extends HTMLAttributes<"article"> {
-    titleTag?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
     iconBgColor?: "grey" | "red" | "green" | "blue" | "yellow" | "orange" | "purple" | "pink";
 }
 
-const { titleTag = "h2", iconBgColor, class: className, ...rest } = Astro.props;
-const TitleTag = titleTag;
+const { iconBgColor, class: className, ...rest } = Astro.props;
 ---
 
 <article class:list={["card", className]} {...rest}>
-    <!-- ICON -->
-    <div class:list={["card__icon", `card__icon--${iconBgColor}`]}>
-        <slot name="icon" />
-    </div>
+    {
+        // ICON
+        Astro.slots.has("icon") && (
+            <div class:list={["card__icon", `card__icon--${iconBgColor}`]}>
+                <slot name="icon" />
+            </div>
+        )
+    }
     <!-- TEXT -->
-    <div class="card__text">
-        <TitleTag class="card__title"><slot name="title" /></TitleTag>
-        <span class="card__description"><slot name="text" /></span>
-    </div>
+    {
+        (Astro.slots.has("title") || Astro.slots.has("text")) && (
+            <div class="card__text">
+                <span class="card__title">
+                    <slot name="title" />
+                </span>
+                <span class="card__description">
+                    <slot name="text" />
+                </span>
+            </div>
+        )
+    }
 </article>
 
 <style lang="scss">
@@ -63,7 +73,7 @@ const TitleTag = titleTag;
         --_icon-bg-color: var(--clr-slate-800);
     }
     .card__icon--red {
-        --_icon-bg-color: var(--clr-red-500);
+        --_icon-bg-color: var(--clr-red-800);
     }
     .card__icon--green {
         --_icon-bg-color: var(--clr-green-500);
@@ -85,13 +95,10 @@ const TitleTag = titleTag;
     }
 
     // TEXT
-    .card__title {
+    .card__title:global(> *) {
         font-size: var(--fs-fluid-h6);
     }
     .card__description:global(> *) {
-        font-size: var(--fs-mobile-sm);
-    }
-    .card__description ::slotted(*) {
         font-size: var(--fs-mobile-sm);
     }
 </style>

@@ -1,52 +1,63 @@
 ---
+// COMPONENTS
 import PageLayout from "@layouts/PageLayout.astro";
 import Card from "@components/Card.astro";
+// ICONS
 import Link from "@components/Link.astro";
 import Gear from "@icons/Gear.astro";
 import Lightning from "@icons/Lightning.astro";
 import Text from "@icons/Text.astro";
+import Clock from "@assets/icons/Clock.astro";
 ---
 
 <PageLayout>
-    <main class="wrapper flow">
-        <h1>Learning GSAP</h1>
-        <p>
-            This is a concurrent learning project learning the GSAP learning library with vanilla
-            HTML, CSS and JavaScript.
-        </p>
-        <p>Here are some other notes about the project:</p>
-        <ul>
-            <li>
-                This project uses Astro for easier development with componennts, scoped styles, and
-                easy integrations with libraries and frameworks.
-            </li>
-            <li>We will go through the basics of GSAP with basic typescript.</li>
-            <li>this project uses prettier and eslint for formatting and linting.</li>
-            <li>Light usage of SASS is in use, mostly for normalize and global styles.</li>
-        </ul>
+    <main class="wrapper">
+        <div class="flow">
+            <h1>Learning GSAP</h1>
+            <p>
+                This is a concurrent learning project learning the GSAP learning library with
+                vanilla HTML, CSS and JavaScript.
+            </p>
+            <p>Here are some other notes about the project:</p>
+            <ul class="flow">
+                <li>
+                    This project uses Astro for easier development with componennts, scoped styles,
+                    and easy integrations with libraries and frameworks.
+                </li>
+                <li>We will go through the basics of GSAP with basic typescript.</li>
+                <li>this project uses prettier and eslint for formatting and linting.</li>
+                <li>Light usage of SASS is in use, mostly for normalize and global styles.</li>
+            </ul>
+        </div>
 
         <section class="grid grid--col-3 section">
             <!-- GETTING STARTED -->
             <Link url="/getting-started">
-                <Card iconBgColor="grey" titleTag="h3">
+                <Card iconBgColor="grey">
                     <Gear size={40} slot={"icon"} />
-                    <Fragment slot="title">Getting Started</Fragment>
-                    <p slot="text">Install for web and ad banners</p>
+                    <h3 slot="title">Getting Started</h3>
+                    <p slot="text">Translations with timelines</p>
                 </Card>
             </Link>
 
             <!-- MOVEMENTS -->
-            <Card iconBgColor="yellow" titleTag="h3">
+            <Card iconBgColor="yellow">
                 <Lightning slot="icon" size={40} />
-                <Fragment slot="title">Movements</Fragment>
-                <p slot="text">Translations with timelines</p>
+                <h3 slot="title">Basics</h3>
+                <p slot="text">Translations</p>
             </Card>
 
+            <!-- TIMELINES -->
+            <Card iconBgColor="red">
+                <Clock slot="icon" size={40} />
+                <h3 slot="title">Timelines</h3>
+                <p slot="text">Complex tweens</p>
+            </Card>
             <!-- TEXT ANIMATIONS -->
-            <Card iconBgColor="orange" titleTag="h3">
+            <Card iconBgColor="orange">
                 <Text slot="icon" size={40} />
-                <Fragment slot="title">Text Animations</Fragment>
-                <p slot="text">Split, swipes, and more!</p>
+                <h3 slot="title">Text Animations</h3>
+                <p slot="text">Split, swipes, and more</p>
             </Card>
         </section>
     </main>

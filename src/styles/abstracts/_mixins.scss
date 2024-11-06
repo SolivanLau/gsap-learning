@@ -1,35 +1,42 @@
+@use "sass:meta";
 @use "sass:math";
+@use "sass:map";
 @use "./functions" as *;
 // BREAKPOINT MIXIN
 // MOBILE FIRST mixin: takes in unitless value. Assumes it is a pixel value and converts it to rem.
 // example usage: @include breakpoint(tablet); (output --> @media (max-width: 768px) { ... })
 // custom breakpoints: @include breakpoint(460px); (output --> @media (max-width: 768px) { ... })
+$breakpoints: (
+    "mobile": 400,
+    "tablet-sm": 600,
+    "tablet": 768,
+    "desktop": 1000,
+);
+
 @mixin breakpoint($breakpoint) {
-    @if $breakpoint == "mobile" {
-        @media (min-width: #{rem(400)}) {
-            @content;
-        }
-    } @else if ($breakpoint == "tablet-sm") {
-        @media (min-width: #{rem(600)}) {
-            @content;
-        }
-    } @else if ($breakpoint == "tablet") {
-        @media (min-width: #{rem(768)}) {
-            @content;
-        }
-    } @else if ($breakpoint == "desktop") {
-        @media (min-width: #{rem(1000)}) {
-            @content;
-        }
-    } @else if math.is-unitless($breakpoint) {
+    // custom number
+    @if meta.type-of($breakpoint) == "number" {
+        $breakpoint: strip-unit($breakpoint);
+
         @media (min-width: #{rem($breakpoint)}) {
             @content;
         }
+    }
+    // preset keywords
+    @else if meta.type-of($breakpoint) == "string" {
+        @if map.has-key($breakpoints, $breakpoint) {
+            @media (min-width: #{rem(map.get($breakpoints, $breakpoint))}) {
+                @content;
+            }
+        } @else {
+            @error "Unknown breakpoint: #{$breakpoint}. Available breakpoints are: #{map.keys($breakpoints)}";
+        }
     } @else {
-        @error "The responsive-style mixin only accepts a unitless value or keyword 'mobile', 'tablet', or 'desktop'. Value #{$breakpoint} was passed.";
+        @error "The breakpoint mixin accepts either a number or one preset keywords: #{map.keys($breakpoints)}. Got: #{meta.type-of($breakpoint)}.";
     }
 }
 
+// TO DO:
 // PSEUDO ELEMENT MIXIN
 // example usage: @include pseudo; (output --> &:after { ... })
 @mixin pseudo($type: before, $pos: absolute, $content: "") {

@@ -1,3 +1,4 @@
+@use "sass:map";
 @use "../abstracts" as *;
 // WRAPPER
 // container class for limiting max width and centering horizontal elements.
@@ -34,12 +35,41 @@
 }
 
 // SECTION
-// applies padding to the top and bottom of the section
-.section {
-    --_section-padding: var(--spc-2xl);
-    padding-block: var(--_section-padding);
+// applies fluid padding to the top and bottom of the section
+// SECTION SPACES MAP : @styles/abstracts/_spaces
+
+$spaces: map.get($section-spaces, "spaces");
+$viewport: map.get($section-spaces, "viewport");
+
+@mixin section-padding($min-size, $max-size) {
+    --_section-padding: #{clamp-calc(
+            map.get($spaces, $min-size),
+            map.get($spaces, $max-size),
+            map.get($viewport, "min"),
+            map.get($viewport, "max")
+        )};
 }
 
-.section--lg {
-    --_section-padding: var(--spc-3xl);
+.section__padding {
+    @include section-padding("md", "lg");
+
+    padding-block: var(--_section-padding) var(--_section-padding);
+}
+
+// SIZE MODIFIERS
+.section__padding--sm {
+    @include section-padding("xs", "sm");
+}
+
+.section__padding--lg {
+    @include section-padding("lg", "xl");
+}
+
+// POSITION MODIFIERS
+.section__padding--top {
+    padding-block: var(--_section-padding) 0;
+}
+
+.section__padding--bottom {
+    padding-block: 0 var(--_section-padding);
 }
