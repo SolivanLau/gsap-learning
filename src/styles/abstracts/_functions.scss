@@ -51,7 +51,7 @@
     @if $max-size < $min-size or $max-viewport < $min-viewport {
         @error "Max values must be greater than min values";
     }
-    
+
     $min-size: strip-unit($min-size);
     $max-size: strip-unit($max-size);
     $min-viewport: strip-unit($min-viewport);
