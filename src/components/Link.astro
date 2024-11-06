@@ -1,16 +1,16 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-interface Props extends HTMLAttributes<"a"> {
-    url: string;
+
+export interface LinkProps extends HTMLAttributes<"a"> {
     external?: boolean;
     preset?: "link--text-light" | "link--text-dark";
 }
 
-const { url, external = false, class: className, preset, ...rest } = Astro.props;
+type Props = LinkProps;
+const { external = false, class: className, preset, ...rest } = Astro.props;
 ---
 
 <a
-    href={url}
     target={external ? "_blank" : null}
     rel={external ? "noreferrer noreferer" : null}
     class:list={["link", className, preset]}
@@ -23,5 +23,8 @@ const { url, external = false, class: className, preset, ...rest } = Astro.props
     .link {
         text-decoration: none;
         color: inherit;
+
+        &:global(> *) {
+        }
     }
 </style>

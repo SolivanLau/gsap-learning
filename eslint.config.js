@@ -5,7 +5,7 @@ import eslintConfigPrettier from "eslint-config-prettier";
 import eslintPluginAstro from "eslint-plugin-astro";
 
 export default [
-    { ignores: ["node_modules/**", ".dist/**"] },
+    { ignores: ["node_modules/**", "dist/**"] },
     {
         files: ["**/*.{js,jsx,mjs,cjs,ts,tsx,astro}"],
         languageOptions: {

@@ -1,36 +1,70 @@
 ---
 import type { HTMLAttributes } from "astro/types";
-
-interface Props extends HTMLAttributes<"article"> {
+import type { LinkProps } from "@components/Link.astro";
+import Link from "@components/Link.astro";
+type BaseProps = {
     iconBgColor?: "grey" | "red" | "green" | "blue" | "yellow" | "orange" | "purple" | "pink";
-}
+    link?: true;
+};
+type NonLinkCard = BaseProps &
+    HTMLAttributes<"article"> & {
+        href?: never; // Explicitly prevent href
+    };
 
-const { iconBgColor, class: className, ...rest } = Astro.props;
+type LinkCard = BaseProps &
+    LinkProps & {
+        link: true;
+    };
+type Props = NonLinkCard | LinkCard;
+
+const { iconBgColor, link, class: className, ...rest } = Astro.props;
 ---
 
-<article class:list={["card", className]} {...rest}>
-    {
-        // ICON
-        Astro.slots.has("icon") && (
-            <div class:list={["card__icon", `card__icon--${iconBgColor}`]}>
-                <slot name="icon" />
-            </div>
-        )
-    }
-    <!-- TEXT -->
-    {
-        (Astro.slots.has("title") || Astro.slots.has("text")) && (
-            <div class="card__text">
-                <span class="card__title">
-                    <slot name="title" />
-                </span>
-                <span class="card__description">
-                    <slot name="text" />
-                </span>
-            </div>
-        )
-    }
-</article>
+{
+    link ? (
+        <Link class:list={["card", "card--link", className]} {...rest}>
+            {
+                // ICON
+                Astro.slots.has("icon") && (
+                    <div class:list={["card__icon", `card__icon--${iconBgColor}`]}>
+                        <slot name="icon" />
+                    </div>
+                )
+            }
+            {(Astro.slots.has("title") || Astro.slots.has("text")) && (
+                <div class="card__text">
+                    <span class="card__title">
+                        <slot name="title" />
+                    </span>
+                    <span class="card__description">
+                        <slot name="text" />
+                    </span>
+                </div>
+            )}
+        </Link>
+    ) : (
+        <article class:list={["card", className]} {...rest}>
+            {
+                // ICON
+                Astro.slots.has("icon") && (
+                    <div class:list={["card__icon", `card__icon--${iconBgColor}`]}>
+                        <slot name="icon" />
+                    </div>
+                )
+            }
+            {(Astro.slots.has("title") || Astro.slots.has("text")) && (
+                <div class="card__text">
+                    <span class="card__title">
+                        <slot name="title" />
+                    </span>
+                    <span class="card__description">
+                        <slot name="text" />
+                    </span>
+                </div>
+            )}
+        </article>
+    )
+}
 
 <style lang="scss">
     @use "../styles/abstracts" as *;
@@ -42,6 +76,28 @@ const { iconBgColor, class: className, ...rest } = Astro.props;
         display: flex;
         align-items: center;
         gap: #{rem(24)};
+        gap: #{clamp-calc(16, 24, 600, 1000)};
+        height: 100%;
+    }
+
+    // LINK MODIFIER: add hover and focus styles
+    .card--link {
+        // transition init
+        transition: background-color 0.2s ease-out;
+
+        .card__icon::before {
+            transition: opacity 0.2s ease-out;
+        }
+
+        // hover and focus visibile
+        &:hover,
+        &:focus-visible {
+            --_card-bg-color: var(--clr-zinc-800);
+
+            .card__icon::before {
+                opacity: 0.8;
+            }
+        }
     }
 
     .card__icon {
@@ -70,7 +126,7 @@ const { iconBgColor, class: className, ...rest } = Astro.props;
 
     // ICON BG MODIFIERS
     .card__icon--grey {
-        --_icon-bg-color: var(--clr-slate-800);
+        --_icon-bg-color: var(--clr-gray-700);
     }
     .card__icon--red {
         --_icon-bg-color: var(--clr-red-800);
@@ -95,10 +151,11 @@ const { iconBgColor, class: className, ...rest } = Astro.props;
     }
 
     // TEXT
+    .card__text {
+        display: grid;
+        gap: #{rem(4)};
+    }
     .card__title:global(> *) {
         font-size: var(--fs-fluid-h6);
-    }
-    .card__description:global(> *) {
-        font-size: var(--fs-mobile-sm);
     }
 </style>

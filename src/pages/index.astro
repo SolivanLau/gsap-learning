@@ -3,15 +3,15 @@
 import PageLayout from "@layouts/PageLayout.astro";
 import Card from "@components/Card.astro";
 // ICONS
-import Link from "@components/Link.astro";
 import Gear from "@icons/Gear.astro";
 import Lightning from "@icons/Lightning.astro";
 import Text from "@icons/Text.astro";
 import Clock from "@assets/icons/Clock.astro";
+import MouseScroll from "@assets/icons/MouseScroll.astro";
 ---
 
 <PageLayout>
-    <main class="wrapper">
+    <main class="wrapper section__padding section__padding--sm">
         <div class="flow">
             <h1>Learning GSAP</h1>
             <p>
@@ -30,35 +30,44 @@ import Clock from "@assets/icons/Clock.astro";
             </ul>
         </div>
 
-        <section class="grid grid--col-3 section">
-            <!-- GETTING STARTED -->
-            <Link url="/getting-started">
-                <Card iconBgColor="grey">
+        <section class="section--learning section__padding section__padding flow">
+            <h2>Start Learning</h2>
+            <p>Here are some topics to get you started!</p>
+            <div class="grid grid--col-3">
+                <!-- GETTING STARTED -->
+                <Card link href="/getting-started" class="link--topic" iconBgColor="grey">
                     <Gear size={40} slot={"icon"} />
                     <h3 slot="title">Getting Started</h3>
-                    <p slot="text">Translations with timelines</p>
+                    <p slot="text">Installation & boilerplate</p>
                 </Card>
-            </Link>
 
-            <!-- MOVEMENTS -->
-            <Card iconBgColor="yellow">
-                <Lightning slot="icon" size={40} />
-                <h3 slot="title">Basics</h3>
-                <p slot="text">Translations</p>
-            </Card>
+                <!-- BASICS -->
+                <Card link href="/basics" class="link--topic" iconBgColor="yellow">
+                    <Lightning slot="icon" size={40} />
+                    <h3 slot="title">Basics</h3>
+                    <p slot="text">Properties, tweens, & keyframes</p>
+                </Card>
 
-            <!-- TIMELINES -->
-            <Card iconBgColor="red">
-                <Clock slot="icon" size={40} />
-                <h3 slot="title">Timelines</h3>
-                <p slot="text">Complex tweens</p>
-            </Card>
-            <!-- TEXT ANIMATIONS -->
-            <Card iconBgColor="orange">
-                <Text slot="icon" size={40} />
-                <h3 slot="title">Text Animations</h3>
-                <p slot="text">Split, swipes, and more</p>
-            </Card>
+                <!-- TIMELINES -->
+                <Card link href="/timelines" class="link--topic" iconBgColor="red" link>
+                    <Clock slot="icon" size={40} />
+                    <h3 slot="title">Timelines</h3>
+                    <p slot="text">Complex tweens</p>
+                </Card>
+
+                <!-- TEXT ANIMATIONS -->
+                <Card link href="/animations/text" class="link--topic" iconBgColor="orange">
+                    <Text slot="icon" size={40} />
+                    <h3 slot="title">Text Animations</h3>
+                    <p slot="text">Split, swipes, and more</p>
+                </Card>
+                <!-- SCROLL -->
+                <Card link href="/animations/scroll" class="link--topic" iconBgColor="green">
+                    <MouseScroll slot="icon" size={40} />
+                    <h3 slot="title">Scroll</h3>
+                    <p slot="text">Play, scrub & link to scroll</p>
+                </Card>
+            </div>
         </section>
     </main>
 </PageLayout>
@@ -78,3 +87,17 @@ import Clock from "@assets/icons/Clock.astro";
         }
     }
 </style>
+
+<script>
+    import { gsap } from "gsap";
+
+    window.addEventListener("load", () => {
+        gsap.from(".link--topic", {
+            opacity: 0,
+            xPercent: -5,
+            duration: 1,
+            stagger: 0.2,
+            ease: "power3.out",
+        });
+    });
+</script>
