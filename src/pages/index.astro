@@ -1,6 +1,7 @@
 ---
 import PageLayout from "../layouts/PageLayout.astro";
 import Card from "../components/Card.astro";
+import Link from "../components/Link.astro";
 import Gear from "../components/icons/Gear.astro";
 import Lightning from "../components/icons/Lightning.astro";
 import Text from "../components/icons/Text.astro";
@@ -24,21 +25,28 @@ import Text from "../components/icons/Text.astro";
             <li>Light usage of SASS is in use, mostly for normalize and global styles.</li>
         </ul>
 
-        <section class="grid grid--col-3">
-            <Card iconBgColor="grey" titleTag="h3">
-                <Gear size={40} slot={"icon"} />
-                <Fragment slot="title">Getting Started</Fragment>
-                <p slot="text">Install for web and ad banners</p>
-            </Card>
-            <Card iconBgColor="orange" titleTag="h3">
-                <Text slot="icon" size={40} />
-                <Fragment slot="title">Text Animations</Fragment>
-                <p slot="text">Split, swipes, and more!</p>
-            </Card>
+        <section class="grid grid--col-3 section">
+            <!-- GETTING STARTED -->
+            <Link url="/getting-started">
+                <Card iconBgColor="grey" titleTag="h3">
+                    <Gear size={40} slot={"icon"} />
+                    <Fragment slot="title">Getting Started</Fragment>
+                    <p slot="text">Install for web and ad banners</p>
+                </Card>
+            </Link>
+
+            <!-- MOVEMENTS -->
             <Card iconBgColor="yellow" titleTag="h3">
                 <Lightning slot="icon" size={40} />
                 <Fragment slot="title">Movements</Fragment>
                 <p slot="text">Translations with timelines</p>
+            </Card>
+
+            <!-- TEXT ANIMATIONS -->
+            <Card iconBgColor="orange" titleTag="h3">
+                <Text slot="icon" size={40} />
+                <Fragment slot="title">Text Animations</Fragment>
+                <p slot="text">Split, swipes, and more!</p>
             </Card>
         </section>
     </main>
@@ -48,7 +56,7 @@ import Text from "../components/icons/Text.astro";
     @use "../styles/abstracts" as *;
     .grid {
         display: grid;
-        gap: #{rem(32)};
+        gap: #{rem(20)};
     }
     .grid--col-3 {
         @include breakpoint(600) {

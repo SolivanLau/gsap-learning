@@ -1,13 +1,32 @@
+@use "sass:meta";
 @use "sass:math";
+// STRIP UNIT FUNCTION
+// helper function to strip unit from pixel values
+// example usage: font-size: @include strip-unit(16px); output: 16;
+@function strip-unit($value) {
+    @if meta.type-of($value) != "number" {
+        @error "The strip-unit() function only accepts a numbered value. Value #{$value} was passed.";
+    }
 
+    @if math.is-unitless($value) {
+        @return $value;
+    }
+
+    @return math.div($value, $value * 0 + 1);
+}
 // REM FUNCTION
 // example usage: font-size: @include rem(16px); output: 1rem;
 // variable usage: --variable-name #{rem(16)} -> 1rem
 @function rem($pixel) {
-    @if math.is-unitless($pixel) {
-        @return math.div($pixel, 16) + rem;
+    @if meta.type-of($pixel) != "number" {
+        @error "The rem() function accepts a pixel value, with or without a px unit. Value #{$pixel} was passed.";
+    }
+
+    @if math.unit($pixel) == "px" or math.is-unitless($pixel) {
+        $sanitized-value: strip-unit($pixel);
+        @return math.div($sanitized-value, 16) + rem;
     } @else {
-        @error "The rem() mixin only accepts unitless values. Value #{$pixel} was passed.";
+        @error "The rem() function accepts px values with px or unitless suffix. Value #{$pixel} was passed.";
     }
 }
 
@@ -15,14 +34,28 @@
 // Predictably clamp values based on max/min viewport width values and a desired pixel value
 
 @function clamp-calc($min-size, $max-size, $min-viewport, $max-viewport) {
-    @if not
-        math.is-unitless($min-size) or not
-        math.is-unitless($max-size) or not
-        math.is-unitless($min-viewport) or not
-        math.is-unitless($max-viewport)
+    // Could add type/unit validation here similar to rem()
+    @if meta.type-of($min-size) !=
+        "number" or
+        meta.type-of($max-size) !=
+        "number" or
+        meta.type-of($min-viewport) !=
+        "number" or
+        meta.type-of($max-viewport) !=
+        "number"
     {
-        @error "The clamp-calc() function only accepts unitless values and assumes it is a pixel value. Values #{$min-size}, #{$max-size}, #{$min-viewport}, and #{$max-viewport} were passed.";
+        @error "All parameters must be numbers. Values passed: #{$min-size}, #{$max-size}, #{$min-viewport}, #{$max-viewport}";
     }
+
+    // Could validate that max values are greater than min values
+    @if $max-size < $min-size or $max-viewport < $min-viewport {
+        @error "Max values must be greater than min values";
+    }
+    
+    $min-size: strip-unit($min-size);
+    $max-size: strip-unit($max-size);
+    $min-viewport: strip-unit($min-viewport);
+    $max-viewport: strip-unit($max-viewport);
     // Calculate the slope
     $slope: math.div($max-size - $min-size, $max-viewport - $min-viewport);
 

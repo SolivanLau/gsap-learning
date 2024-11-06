@@ -18,7 +18,7 @@ const TitleTag = titleTag;
     <!-- TEXT -->
     <div class="card__text">
         <TitleTag class="card__title"><slot name="title" /></TitleTag>
-        <Fragment><slot name="text" /></Fragment>
+        <span class="card__description"><slot name="text" /></span>
     </div>
 </article>
 
@@ -60,7 +60,7 @@ const TitleTag = titleTag;
 
     // ICON BG MODIFIERS
     .card__icon--grey {
-        --_icon-bg-color: var(--clr-zinc-700);
+        --_icon-bg-color: var(--clr-slate-800);
     }
     .card__icon--red {
         --_icon-bg-color: var(--clr-red-500);
@@ -72,7 +72,7 @@ const TitleTag = titleTag;
         --_icon-bg-color: var(--clr-blue-500);
     }
     .card__icon--yellow {
-        --_icon-bg-color: var(--clr-orange-500);
+        --_icon-bg-color: var(--clr-yellow-700);
     }
     .card__icon--orange {
         --_icon-bg-color: var(--clr-orange-700);
@@ -88,7 +88,10 @@ const TitleTag = titleTag;
     .card__title {
         font-size: var(--fs-fluid-h6);
     }
-    .card__text {
-        font-size: var(--fs-fluid-sm);
+    .card__description:global(> *) {
+        font-size: var(--fs-mobile-sm);
+    }
+    .card__description ::slotted(*) {
+        font-size: var(--fs-mobile-sm);
     }
 </style>

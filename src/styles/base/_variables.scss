@@ -35,4 +35,10 @@
                 $max-viewport
             )};
     }
+
+    // SPACING: map from ./abstracts/_spaces
+    @each $space, $value in $spaces {
+        // @debug $value;
+        --spc-#{$space}: #{$value};
+    }
 }
