@@ -8,12 +8,13 @@ import Lightning from "@icons/Lightning.astro";
 import Text from "@icons/Text.astro";
 import Clock from "@assets/icons/Clock.astro";
 import MouseScroll from "@assets/icons/MouseScroll.astro";
+import Hero from "@components/Hero.astro";
 ---
 
 <PageLayout>
+    <Hero />
     <main class="wrapper section__padding section__padding--sm">
         <div class="flow">
-            <h1>Learning GSAP</h1>
             <p>
                 This is a concurrent learning project learning the GSAP learning library with
                 vanilla HTML, CSS and JavaScript.
@@ -36,34 +37,34 @@ import MouseScroll from "@assets/icons/MouseScroll.astro";
             <div class="grid grid--col-3">
                 <!-- GETTING STARTED -->
                 <Card link href="/getting-started" class="link--topic" iconBgColor="grey">
-                    <Gear size={40} slot={"icon"} />
+                    <Gear data-animation="gear" size={40} slot={"icon"} />
                     <h3 slot="title">Getting Started</h3>
                     <p slot="text">Installation & boilerplate</p>
                 </Card>
 
                 <!-- BASICS -->
                 <Card link href="/basics" class="link--topic" iconBgColor="yellow">
-                    <Lightning slot="icon" size={40} />
+                    <Lightning data-animation="lightning" slot="icon" size={40} />
                     <h3 slot="title">Basics</h3>
                     <p slot="text">Properties, tweens, & keyframes</p>
                 </Card>
 
                 <!-- TIMELINES -->
                 <Card link href="/timelines" class="link--topic" iconBgColor="red" link>
-                    <Clock slot="icon" size={40} />
+                    <Clock data-animation="clock" slot="icon" size={40} />
                     <h3 slot="title">Timelines</h3>
                     <p slot="text">Complex tweens</p>
                 </Card>
 
                 <!-- TEXT ANIMATIONS -->
                 <Card link href="/animations/text" class="link--topic" iconBgColor="orange">
-                    <Text slot="icon" size={40} />
+                    <Text data-animation="text" slot="icon" size={40} />
                     <h3 slot="title">Text Animations</h3>
                     <p slot="text">Split, swipes, and more</p>
                 </Card>
                 <!-- SCROLL -->
                 <Card link href="/animations/scroll" class="link--topic" iconBgColor="green">
-                    <MouseScroll slot="icon" size={40} />
+                    <MouseScroll data-animation="mouse-scroll" slot="icon" size={40} />
                     <h3 slot="title">Scroll</h3>
                     <p slot="text">Play, scrub & link to scroll</p>
                 </Card>
@@ -88,16 +89,275 @@ import MouseScroll from "@assets/icons/MouseScroll.astro";
     }
 </style>
 
+<!-- <script>
+    import { gsap } from "gsap";
+    import { toArray } from "gsap/all";
+    import CustomEase from "gsap/CustomEase";
+    gsap.registerPlugin(CustomEase);
+    const tlLearningSection = gsap.timeline();
+    const learningCards = toArray(".link--topic");
+
+    // LEARNING SECTION
+
+    tlLearningSection
+        .from(".section--learning > h2, .section--learning > p", {
+            opacity: 0,
+            duration: 0.5,
+            stagger: 0.3,
+            yPercent: -25,
+            ease: "power3.out",
+        })
+        .from(
+            ".link--topic",
+            {
+                autoAlpha: 0,
+                xPercent: -5,
+                duration: 0.7,
+                stagger: 0.2,
+                ease: "power3.out",
+            },
+            "<0.5", // Start immediately after
+        );
+
+    // LEARNING CARDS
+
+    // HOVER ANIMATIONS
+    type AnimationInOut = {
+        in: {
+            [key: string]: string | number | boolean;
+        };
+        out: {
+            [key: string]: string | number | boolean;
+        };
+    };
+    type AnimationSequence = [
+        {
+            [key: string]: string | number | boolean;
+        },
+        {
+            [key: string]: string | number | boolean;
+        },
+    ];
+    type BaseCardAnimation = {
+        timelineOptions?: {
+            [key: string]: string | number | boolean;
+        };
+    };
+    type inOutCardAnimation = BaseCardAnimation & {
+        type: "inOut";
+        animation: AnimationInOut;
+    };
+    type sequenceCardAnimation = BaseCardAnimation & {
+        type: "sequence";
+        animation: AnimationSequence;
+    };
+    type CardAnimation = inOutCardAnimation | sequenceCardAnimation;
+
+    const cardAnimations: { [key: string]: CardAnimation } = {
+        global: {
+            type: "inOut",
+            animation: {
+                in: {
+                    scale: 1.4,
+                    ease: "elastic.out(1.5, 0.75)",
+                    duration: 0.5,
+                    filter: "drop-shadow(0 0 5px rgba(255, 231, 135, .1))",
+                },
+                out: {
+                    scale: 1,
+                    ease: "bounce.out",
+                    duration: 0.8,
+                    filter: "drop-shadow(0 0 5px rgba(255, 231, 135, 0px))",
+                },
+            },
+        },
+        gear: {
+            type: "inOut",
+            animation: {
+                in: {
+                    transformOrigin: "center center",
+                    rotate: "+=360",
+                    ease: "power1.out",
+                    duration: 0.9,
+                },
+                out: {
+                    rotate: "-=180",
+                    duration: 0.7,
+                },
+            },
+            timelineOptions: {
+                paused: true,
+            },
+        },
+        lightning: {
+            type: "sequence",
+            animation: [
+                {
+                    transformOrigin: "center center",
+                    rotate: "+=20",
+                    ease: "steps(2)",
+                    duration: 0.4,
+                },
+                {
+                    transformOrigin: "center center",
+                    rotate: "-=20",
+                    ease: "steps(2)",
+                    duration: 0.4,
+                },
+            ],
+            timelineOptions: {
+                paused: true,
+                yoyo: true,
+            },
+        },
+    };
+
+    const createglobalIconAnimation = (target: SVGElement) => {
+        const globalInTl = gsap.timeline(cardAnimations.global.timelineOptions);
+        const globalOutTl = gsap.timeline(cardAnimations.global.timelineOptions);
+        if (cardAnimations.global.type === "inOut") {
+            globalInTl.to(target, cardAnimations.global.animation.in);
+            globalOutTl.to(target, cardAnimations.global.animation.out);
+        }
+
+        return {
+            globalInTl,
+            globalOutTl,
+        };
+    };
+
+    learningCards.forEach((learningCard) => {
+        const card = learningCard as HTMLElement | null;
+        if (card) {
+            const icon = card.querySelector("[data-animation]") as SVGElement;
+            const animationType = icon.getAttribute("data-animation") as string | null;
+
+            const iconAnimation = cardAnimations[animationType as keyof typeof cardAnimations];
+            const timelineOptions = iconAnimation?.timelineOptions;
+            if (iconAnimation && iconAnimation.type === "inOut") {
+                // global animations
+                const { globalInTl, globalOutTl } = createglobalIconAnimation(icon);
+                // init timeline. add timeline options if they exist
+                const inAnimation = {
+                    ...iconAnimation.animation.in,
+                };
+                const outAnimation = {
+                    ...iconAnimation.animation.out,
+                };
+
+                const inTL = gsap.timeline(timelineOptions);
+                const outTL = gsap.timeline(timelineOptions);
+
+                inTL.to(icon, inAnimation);
+                outTL.to(icon, outAnimation);
+
+                card.addEventListener("mouseenter", () => {
+                    globalInTl.restart();
+                    inTL.restart();
+                });
+                card.addEventListener("mouseleave", () => {
+                    globalOutTl.restart();
+                    outTL.restart();
+                });
+                card.addEventListener("focus", () => {
+                    globalInTl.restart();
+                    inTL.restart();
+                });
+                card.addEventListener("blur", () => {
+                    globalOutTl.restart();
+                    outTL.restart();
+                });
+            }
+
+            // if (iconAnimation && iconAnimation.type === "sequence") {
+            //     // init timeline. add timeline options if they exist
+            //     const iconTl = gsap.timeline(timelineOptions);
+
+            //     // global animations
+            //     const { globalInTl, globalOutTl } = createglobalIconAnimation(icon);
+            //     // custom icon animation
+            //     iconAnimation.animation.forEach((animation) => {
+            //         iconTl.to(icon, animation);
+            //     });
+
+            //     card.addEventListener("mouseenter", () => {
+            //         globalInTl.restart();
+            //         // iconTl.play();
+            //     });
+            //     card.addEventListener("mouseleave", () => {
+            //         globalOutTl.restart();
+            //         // iconTl.reverse();
+            //     });
+            // }
+        }
+    });
+</script> -->
+
 <script>
     import { gsap } from "gsap";
-
-    window.addEventListener("load", () => {
-        gsap.from(".link--topic", {
+    const tlLearningSection = gsap.timeline();
+    tlLearningSection
+        .from(".section--learning > h2, .section--learning > p", {
             opacity: 0,
-            xPercent: -5,
-            duration: 1,
-            stagger: 0.2,
+            duration: 0.5,
+            stagger: 0.3,
+            yPercent: -25,
             ease: "power3.out",
+        })
+        .from(
+            ".link--topic",
+            {
+                autoAlpha: 0,
+                xPercent: -5,
+                duration: 0.7,
+                stagger: 0.2,
+                ease: "power3.out",
+            },
+            "<0.5", // Start immediately after
+        );
+
+    const learningCards = document.querySelectorAll(".link--topic");
+
+    learningCards.forEach((learningCard) => {
+        const iconTl = gsap.timeline({
+            paused: true,
+            smoothChildTiming: true,
+        });
+        const icon = learningCard.querySelector("[data-animation]") as SVGElement;
+
+        iconTl
+            .to(
+                icon,
+                {
+                    scale: 1.4,
+                    ease: "elastic.out(1.5, 0.75)",
+                    duration: 0.5,
+                    filter: "drop-shadow(0 0 5px rgba(255, 231, 135, .1))",
+                },
+                "grow",
+            )
+            .to(
+                icon,
+                {
+                    scale: 1,
+                    ease: "bounce.out",
+                    duration: 0.3,
+                    filter: "drop-shadow(0 0 5px rgba(255, 231, 135, 0px))",
+                },
+                "shrink",
+            );
+
+        learningCard.addEventListener("mouseenter", () => {
+            iconTl.tweenFromTo(0, "shrink");
+        });
+        learningCard.addEventListener("mouseleave", () => {
+            iconTl.play("shrink");
+        });
+        learningCard.addEventListener("focus", () => {
+            iconTl.tweenFromTo(0, "shrink");
+        });
+        learningCard.addEventListener("blur", () => {
+            iconTl.play("shrink");
         });
     });
 </script>

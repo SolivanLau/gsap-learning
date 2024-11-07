@@ -1,0 +1,35 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import TextSplit from "./animations/TextSplit.astro";
+
+type Props = HTMLAttributes<"header">;
+const { class: className, ...rest } = Astro.props;
+---
+
+<header class:list={["hero", className]} {...rest}>
+    <h1 class="hero__title">
+        <span class="learning">Learning</span>
+        <TextSplit text="GSAP" as="div" />
+    </h1>
+</header>
+
+<style lang="scss">
+    h1 {
+        text-align: center;
+    }
+
+    .learning {
+        position: relative;
+    }
+</style>
+
+<script>
+    import { gsap } from "gsap";
+
+    gsap.from("header h1", {
+        opacity: 0,
+        yPercent: 25,
+        duration: 0.5,
+        ease: "power3.out",
+    });
+</script>
