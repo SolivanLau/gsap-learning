@@ -1,6 +1,8 @@
+// size prop: percentage allows css to override
+type IconSizeValue = number | `${number}%`;
 // using size to preserve aspect ratio
 interface SizeIconProps {
-    size: number;
+    size: IconSizeValue;
     width?: never;
     height?: never;
 }
@@ -8,8 +10,8 @@ interface SizeIconProps {
 // props for control precise dimensions
 interface DimensonIconProps {
     size?: never;
-    width: number;
-    height: number;
+    width: IconSizeValue;
+    height: IconSizeValue;
 }
 
 // props require either just size OR width and height props

@@ -12,7 +12,7 @@ import Hero from "@components/Hero.astro";
 ---
 
 <PageLayout>
-    <Hero />
+    <Hero class="section__padding section__padding--bottom" />
     <main class="wrapper section__padding section__padding--sm">
         <div class="flow">
             <p>
@@ -89,213 +89,19 @@ import Hero from "@components/Hero.astro";
     }
 </style>
 
-<!-- <script>
-    import { gsap } from "gsap";
-    import { toArray } from "gsap/all";
-    import CustomEase from "gsap/CustomEase";
-    gsap.registerPlugin(CustomEase);
-    const tlLearningSection = gsap.timeline();
-    const learningCards = toArray(".link--topic");
-
-    // LEARNING SECTION
-
-    tlLearningSection
-        .from(".section--learning > h2, .section--learning > p", {
-            opacity: 0,
-            duration: 0.5,
-            stagger: 0.3,
-            yPercent: -25,
-            ease: "power3.out",
-        })
-        .from(
-            ".link--topic",
-            {
-                autoAlpha: 0,
-                xPercent: -5,
-                duration: 0.7,
-                stagger: 0.2,
-                ease: "power3.out",
-            },
-            "<0.5", // Start immediately after
-        );
-
-    // LEARNING CARDS
-
-    // HOVER ANIMATIONS
-    type AnimationInOut = {
-        in: {
-            [key: string]: string | number | boolean;
-        };
-        out: {
-            [key: string]: string | number | boolean;
-        };
-    };
-    type AnimationSequence = [
-        {
-            [key: string]: string | number | boolean;
-        },
-        {
-            [key: string]: string | number | boolean;
-        },
-    ];
-    type BaseCardAnimation = {
-        timelineOptions?: {
-            [key: string]: string | number | boolean;
-        };
-    };
-    type inOutCardAnimation = BaseCardAnimation & {
-        type: "inOut";
-        animation: AnimationInOut;
-    };
-    type sequenceCardAnimation = BaseCardAnimation & {
-        type: "sequence";
-        animation: AnimationSequence;
-    };
-    type CardAnimation = inOutCardAnimation | sequenceCardAnimation;
-
-    const cardAnimations: { [key: string]: CardAnimation } = {
-        global: {
-            type: "inOut",
-            animation: {
-                in: {
-                    scale: 1.4,
-                    ease: "elastic.out(1.5, 0.75)",
-                    duration: 0.5,
-                    filter: "drop-shadow(0 0 5px rgba(255, 231, 135, .1))",
-                },
-                out: {
-                    scale: 1,
-                    ease: "bounce.out",
-                    duration: 0.8,
-                    filter: "drop-shadow(0 0 5px rgba(255, 231, 135, 0px))",
-                },
-            },
-        },
-        gear: {
-            type: "inOut",
-            animation: {
-                in: {
-                    transformOrigin: "center center",
-                    rotate: "+=360",
-                    ease: "power1.out",
-                    duration: 0.9,
-                },
-                out: {
-                    rotate: "-=180",
-                    duration: 0.7,
-                },
-            },
-            timelineOptions: {
-                paused: true,
-            },
-        },
-        lightning: {
-            type: "sequence",
-            animation: [
-                {
-                    transformOrigin: "center center",
-                    rotate: "+=20",
-                    ease: "steps(2)",
-                    duration: 0.4,
-                },
-                {
-                    transformOrigin: "center center",
-                    rotate: "-=20",
-                    ease: "steps(2)",
-                    duration: 0.4,
-                },
-            ],
-            timelineOptions: {
-                paused: true,
-                yoyo: true,
-            },
-        },
-    };
-
-    const createglobalIconAnimation = (target: SVGElement) => {
-        const globalInTl = gsap.timeline(cardAnimations.global.timelineOptions);
-        const globalOutTl = gsap.timeline(cardAnimations.global.timelineOptions);
-        if (cardAnimations.global.type === "inOut") {
-            globalInTl.to(target, cardAnimations.global.animation.in);
-            globalOutTl.to(target, cardAnimations.global.animation.out);
-        }
-
-        return {
-            globalInTl,
-            globalOutTl,
-        };
-    };
-
-    learningCards.forEach((learningCard) => {
-        const card = learningCard as HTMLElement | null;
-        if (card) {
-            const icon = card.querySelector("[data-animation]") as SVGElement;
-            const animationType = icon.getAttribute("data-animation") as string | null;
-
-            const iconAnimation = cardAnimations[animationType as keyof typeof cardAnimations];
-            const timelineOptions = iconAnimation?.timelineOptions;
-            if (iconAnimation && iconAnimation.type === "inOut") {
-                // global animations
-                const { globalInTl, globalOutTl } = createglobalIconAnimation(icon);
-                // init timeline. add timeline options if they exist
-                const inAnimation = {
-                    ...iconAnimation.animation.in,
-                };
-                const outAnimation = {
-                    ...iconAnimation.animation.out,
-                };
-
-                const inTL = gsap.timeline(timelineOptions);
-                const outTL = gsap.timeline(timelineOptions);
-
-                inTL.to(icon, inAnimation);
-                outTL.to(icon, outAnimation);
-
-                card.addEventListener("mouseenter", () => {
-                    globalInTl.restart();
-                    inTL.restart();
-                });
-                card.addEventListener("mouseleave", () => {
-                    globalOutTl.restart();
-                    outTL.restart();
-                });
-                card.addEventListener("focus", () => {
-                    globalInTl.restart();
-                    inTL.restart();
-                });
-                card.addEventListener("blur", () => {
-                    globalOutTl.restart();
-                    outTL.restart();
-                });
-            }
-
-            // if (iconAnimation && iconAnimation.type === "sequence") {
-            //     // init timeline. add timeline options if they exist
-            //     const iconTl = gsap.timeline(timelineOptions);
-
-            //     // global animations
-            //     const { globalInTl, globalOutTl } = createglobalIconAnimation(icon);
-            //     // custom icon animation
-            //     iconAnimation.animation.forEach((animation) => {
-            //         iconTl.to(icon, animation);
-            //     });
-
-            //     card.addEventListener("mouseenter", () => {
-            //         globalInTl.restart();
-            //         // iconTl.play();
-            //     });
-            //     card.addEventListener("mouseleave", () => {
-            //         globalOutTl.restart();
-            //         // iconTl.reverse();
-            //     });
-            // }
-        }
-    });
-</script> -->
-
 <script>
     import { gsap } from "gsap";
-    const tlLearningSection = gsap.timeline();
+    import { CustomEase } from "gsap/CustomEase";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(CustomEase);
+
+    const tlLearningSection = gsap.timeline({
+        scrollTrigger: {
+            trigger: ".section--learning",
+            start: "top 80%",
+        },
+    });
     tlLearningSection
         .from(".section--learning > h2, .section--learning > p", {
             opacity: 0,
@@ -316,6 +122,7 @@ import Hero from "@components/Hero.astro";
             "<0.5", // Start immediately after
         );
 
+    // Custom Hover Animations
     const learningCards = document.querySelectorAll(".link--topic");
 
     learningCards.forEach((learningCard) => {
@@ -330,6 +137,7 @@ import Hero from "@components/Hero.astro";
                 icon,
                 {
                     scale: 1.4,
+                    rotate: 5,
                     ease: "elastic.out(1.5, 0.75)",
                     duration: 0.5,
                     filter: "drop-shadow(0 0 5px rgba(255, 231, 135, .1))",
@@ -340,8 +148,12 @@ import Hero from "@components/Hero.astro";
                 icon,
                 {
                     scale: 1,
-                    ease: "bounce.out",
-                    duration: 0.3,
+                    rotate: 0,
+                    ease: CustomEase.create(
+                        "custom",
+                        "M0,0 C0.14,0 0.242,0.438 0.272,0.561 0.313,0.728 0.354,0.963 0.362,1 0.37,0.985 0.414,0.736 0.455,0.674 0.51,0.589 0.573,0.627 0.586,0.636 0.662,0.686 0.719,0.981 0.726,0.998 0.788,0.914 0.823,0.896 0.859,0.931 0.875,0.947 0.897,0.985 0.911,0.998 0.922,0.994 0.939,0.984 0.954,0.984 0.969,0.984 1,1 1,1 ",
+                    ),
+                    duration: 0.4,
                     filter: "drop-shadow(0 0 5px rgba(255, 231, 135, 0px))",
                 },
                 "shrink",

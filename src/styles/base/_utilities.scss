@@ -57,6 +57,9 @@ $viewport: map.get($section-spaces, "viewport");
 }
 
 // SIZE MODIFIERS
+.section__padding--xs {
+    @include section-padding("2xs", "xs");
+}
 .section__padding--sm {
     @include section-padding("xs", "sm");
 }

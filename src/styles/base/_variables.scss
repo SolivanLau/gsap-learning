@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "sass:string";
 @use "../abstracts" as *;
 
 :root {
@@ -13,7 +14,8 @@
     // UI
     --clr-bg: var(--clr-stone-950);
     --clr-title: var(--clr-neutral-50);
-    --clr-text: var(--clr-stone-400);
+    --clr-btn: var(--clr-neutral-50);
+    --clr-text: color-mix(in oklab, var(--clr-neutral-50) 70%, transparent);
 
     // FONTS: map from ./abstracts/_fonts
     @each $size, $breakpoints in $font-sizes {
@@ -37,6 +39,7 @@
     }
 
     // SPACING: map from ./abstracts/_spaces
+    // SYNTAX: --spc-xl, --spc-md
     @each $space, $value in $spaces {
         // @debug $value;
         --spc-#{$space}: #{$value};

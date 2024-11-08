@@ -3,28 +3,95 @@ import type { HTMLAttributes } from "astro/types";
 
 export interface LinkProps extends HTMLAttributes<"a"> {
     external?: boolean;
-    preset?: "link--text-light" | "link--text-dark";
+    preset?: "link--text-light" | "link--text-dark" | "btn--primary" | "btn--secondary";
 }
 
 type Props = LinkProps;
 const { external = false, class: className, preset, ...rest } = Astro.props;
+
+let presetClasses: string | undefined = preset;
+
+if (preset && preset.includes("btn")) {
+    presetClasses = `btn ${preset}`;
+}
 ---
 
 <a
     target={external ? "_blank" : null}
     rel={external ? "noreferrer noreferer" : null}
-    class:list={["link", className, preset]}
+    class:list={["link", className, presetClasses]}
     {...rest}
 >
     <slot />
+
+    {
+        Astro.slots.has("icon") && (
+            <div class="link__icon">
+                <slot name="icon" />
+            </div>
+        )
+    }
 </a>
 
 <style lang="scss">
+    @use "../styles/abstracts" as *;
     .link {
         text-decoration: none;
         color: inherit;
+        cursor: pointer;
+    }
 
-        &:global(> *) {
+    .btn {
+        --_btn-bg-color: ;
+        --_btn-text-color: var(--clr-btn);
+        --_btn-box-shadow: ;
+        --_btn-border-color: transparent;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: rem(8);
+        padding: rem(12) rem(24);
+        background: var(--_btn-bg-color);
+        color: var(--_btn-text-color);
+        box-shadow: var(--_btn-box-shadow);
+        outline: 2px solid var(--_btn-border-color);
+        border-radius: var(--bdr-radius);
+    }
+
+    .btn--primary {
+        --_btn-bg-color: linear-gradient(
+            0deg,
+            var(--clr-indigo-700) 0%,
+            var(--clr-indigo-400) 100%
+        );
+        --_btn-box-shadow: 0 10px 24px -8px #4d36d0be;
+
+        transition:
+            filter 0.2s ease-in-out,
+            box-shadow 0.2s ease-in-out;
+
+        &:hover,
+        &:focus-visible {
+            filter: brightness(1.07);
+            --_btn-box-shadow: 0 10px 24px -4px #4d36d0be;
+        }
+    }
+
+    .btn--secondary {
+        --_btn-bg-color: transparent;
+        --_btn-text-color: var(--clr-text);
+        --_btn-box-shadow: 0 10px 24px -8px #4d36d0be;
+        --_btn-border-color: rgba(77, 54, 208, 0.224);
+        transition:
+            filter 0.2s ease-in-out,
+            box-shadow 0.2s ease-in-out,
+            color 0.2s ease-in-out;
+        &:hover,
+        &:focus-visible {
+            filter: brightness(1.07);
+            --_btn-box-shadow: 0 10px 24px -4px #4d36d0be;
+            --_btn-text-color: var(--clr-btn);
         }
     }
 </style>

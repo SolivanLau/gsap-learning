@@ -1,0 +1,36 @@
+---
+import type { HTMLAttributes } from "astro/types";
+type Props = HTMLAttributes<"div"> & {
+    as: "div" | "section" | "article";
+};
+
+const { as, class: className, ...rest } = Astro.props;
+const Element = as;
+---
+
+<Element class:list={["background background--glowing", className]} {...rest}>
+    <div class="background__glow"></div>
+    <div class="background__glow"></div>
+    <div class="background__glow"></div>
+    <div class="background__glow"></div>
+    <div class="background__glow"></div>
+</Element>
+
+<style lang="scss">
+    .background--glowing {
+        position: fixed;
+        width: 100%;
+        height: auto;
+    }
+
+    .background__glow {
+        --_glow-color: ;
+        --_glow-delay: ;
+        --_glow-size: ;
+        --_glow-speed: ;
+
+        aspect-ratio: 1;
+        width: calc(150% * var(--_glow-size));
+        transform-origin: 50% 50%;
+    }
+</style>

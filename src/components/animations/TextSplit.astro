@@ -3,20 +3,60 @@ import type { HTMLAttributes } from "astro/types";
 type BaseProps = HTMLAttributes<"h1"> & {
     as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span" | "div";
     text: string;
+    textAlign?: "center" | "left" | "right";
     letterClass?: string;
+    letterSpacing?: number;
 };
-
 type Props = BaseProps;
-const { text, as, letterClass, class: className, ...rest } = Astro.props;
+
+// TEXT SPLIT
+// Takes any text element and splits letters into separate <span> for GSAP animations.
+// as prop controls Parent Tag element for semantics
+// text prop is the text to be split
+// textAlign and letterSpacing are optional props used to style the text.
+
+// PROPS
+const { as, text, textAlign, letterClass, letterSpacing, class: className, ...rest } = Astro.props;
+
+// SCSS Variables: define:vars directive in this current version of astro does not work with the dynamic Parent Tag. Extra div is used to work around this.
+let textAlignValue: string | undefined = textAlign;
+switch (textAlign) {
+    case "left":
+        textAlignValue = "flex-start";
+        break;
+    case "right":
+        textAlignValue = "flex-end";
+        break;
+    case "center":
+        textAlignValue = "center";
+        break;
+    default:
+        textAlignValue = textAlign;
+        break;
+}
+const letterSpacingValue = `${letterSpacing}px`;
+
 const textArray = Array.from(text);
 const Element = as;
 ---
 
 <Element class:list={["text-split", className]} {...rest}>
-    {
-        // prettier-ignore
-        textArray.map((letter, index) => (
-            <span class:list={["letter", `letter-${index + 1}`, letterClass]}>{letter}</span>
-        ))
-    }
+    <div class="text-split__container">
+        {
+            // prettier-ignore
+            textArray.map((letter, index) => (
+                <span class:list={["letter", `letter-${index + 1}`, letterClass]}>{letter}</span>
+            ))
+        }
+    </div>
 </Element>
+
+<style lang="scss" define:vars={{ letterSpacingValue, textAlign: textAlignValue }}>
+    .text-split__container {
+        --_letter-spacing: var(--letterSpacingValue, 0);
+        --_alignment: var(--textAlign, start);
+        display: flex;
+        justify-content: var(--_alignment);
+        gap: var(--_letter-spacing);
+    }
+</style>
