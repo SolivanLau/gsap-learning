@@ -33,7 +33,7 @@ if (preset && preset.includes("btn")) {
     }
 </a>
 
-<style lang="scss">
+<style lang="scss" is:global>
     @use "../styles/abstracts" as *;
     .link {
         text-decoration: none;
@@ -55,7 +55,7 @@ if (preset && preset.includes("btn")) {
         background: var(--_btn-bg-color);
         color: var(--_btn-text-color);
         box-shadow: var(--_btn-box-shadow);
-        outline: 2px solid var(--_btn-border-color);
+        border: 2px solid var(--_btn-border-color);
         border-radius: var(--bdr-radius);
     }
 
@@ -65,7 +65,7 @@ if (preset && preset.includes("btn")) {
             var(--clr-indigo-700) 0%,
             var(--clr-indigo-400) 100%
         );
-        --_btn-box-shadow: 0 10px 24px -8px #4d36d0be;
+        --_btn-box-shadow: 0 10px 24px -8px color-mix(in oklab, var(--clr-indigo-700) 80%, transparent);
 
         transition:
             filter 0.2s ease-in-out,
@@ -81,8 +81,8 @@ if (preset && preset.includes("btn")) {
     .btn--secondary {
         --_btn-bg-color: transparent;
         --_btn-text-color: var(--clr-text);
-        --_btn-box-shadow: 0 10px 24px -8px #4d36d0be;
-        --_btn-border-color: rgba(77, 54, 208, 0.224);
+        --_btn-box-shadow: 0 10px 24px -8px color-mix(in oklab, var(--clr-indigo-700) 80%, transparent);
+        --_btn-border-color: color-mix(in oklab, var(--clr-indigo-700) 20%, transparent);
         transition:
             filter 0.2s ease-in-out,
             box-shadow 0.2s ease-in-out,

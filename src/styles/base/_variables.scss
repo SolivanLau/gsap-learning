@@ -9,6 +9,8 @@
             --clr-#{$color}-#{$shade}: #{$value};
         }
     }
+
+    --clr-box-shadow: 0 10px 24px -8px color-mix(in oklab, var(--clr-indigo-700) 80%, transparent);
     // BORDER
     --bdr-radius: #{rem(12)};
     // UI

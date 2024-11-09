@@ -1,6 +1,7 @@
 ---
 import "@styles/main.scss";
 
+import Nav from "@components/Nav.astro";
 interface Props {
     title?: string;
 }
@@ -17,6 +18,7 @@ const { title = "GSAP Learning" } = Astro.props;
         <title>{title}</title>
     </head>
     <body>
+        <Nav />
         <slot />
     </body>
 </html>

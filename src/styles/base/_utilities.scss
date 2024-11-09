@@ -34,6 +34,23 @@
     margin-block-start: var(--_flow-space, 1em);
 }
 
+// SCREEN READER ONLY SR ONLY
+// Visually hides element. Used for screen readers only.
+// EXAMPLE USAGE: alt text
+// <p class="sr-only">...</p>
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
+    white-space: nowrap;
+    clip-path: inset(100%);
+    clip: rect(0 0 0 0);
+    overflow: hidden;
+}
+
 // SECTION
 // applies fluid padding to the top and bottom of the section
 // SECTION SPACES MAP : @styles/abstracts/_spaces
