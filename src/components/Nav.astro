@@ -11,16 +11,18 @@ const { class: className, ...rest } = Astro.props;
 ---
 
 <nav class:list={["nav", className]} {...rest}>
-    <div class="wrapper nav__wrapper">
+    <div class="wrapper nav__wrapper nav__wrapper--scrolling">
+        <div class="logo"></div>
         <div class="nav__list">
             <ul class="nav__links">
                 <li>
-                    <Link href="/getting-started" class="nav__link fs-fluid-h5"
-                        >Getting Started</Link
-                    >
+                    <Link href="/getting-started" class="nav__link fs-fluid-h5">Projects</Link>
                 </li>
                 <li>
-                    <Link href="/basics" class="nav__link fs-fluid-h5">Basics</Link>
+                    <Link href="/basics" class="nav__link fs-fluid-h5">Learn</Link>
+                </li>
+                <li>
+                    <Link href="/blog" class="nav__link fs-fluid-h5">Blog</Link>
                 </li>
             </ul>
             <hr class="divider" />
@@ -34,32 +36,47 @@ const { class: className, ...rest } = Astro.props;
 <style lang="scss">
     @use "../styles/abstracts" as *;
     .nav {
-        position: relative;
-        isolation: isolate;
-        z-index: 100;
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 150;
     }
 
     .nav__wrapper {
         border: 2px solid color-mix(in oklab, var(--clr-indigo-700) 20%, transparent);
         box-shadow: var(--clr-box-shadow);
         border-radius: var(--bdr-radius);
+        padding: var(--spc-sm) var(--spc-md);
+        display: flex;
+        justify-content: space-between;
+
+        overflow: hidden;
+        background-color: var(--clr-bg);
     }
 
     .nav__list {
-        position: absolute;
+        // mobile menu
         width: 70%;
         top: 0;
         right: 0;
         height: 100vh;
         height: 100dvh;
+        // layout
         padding: var(--spc-2xl) var(--spc-md) var(--spc-md);
         display: flex;
         flex-direction: column;
         // glassmorphism
         backdrop-filter: blur(10px);
         background-color: color-mix(in oklab, var(--clr-stone-950) 70%, transparent);
-        border-radius: 12px;
+        border-radius: var(--bdr-radius) 0 0 var(--bdr-radius);
         border: 2px solid color-mix(in oklab, var(--clr-indigo-600) 20%, transparent);
+        z-index: 200;
+        @include breakpoint(tablet) {
+            width: auto;
+            height: auto;
+            border: 2px solid transparent;
+            padding: 0;
+        }
     }
 
     .nav__links {
@@ -68,11 +85,23 @@ const { class: className, ...rest } = Astro.props;
         flex-direction: column;
         gap: var(--spc-md);
         max-height: 70%;
+
+        @include breakpoint(tablet) {
+            flex-direction: row;
+        }
+    }
+    .nav__link {
+        @include breakpoint(tablet) {
+            font-size: var(--fs-desktop-h6);
+        }
     }
 
     .divider {
         border: 1px solid color-mix(in oklab, var(--clr-indigo-600) 20%, transparent);
         width: 100%;
+        @include breakpoint(tablet) {
+            display: none;
+        }
     }
 </style>
 
@@ -81,16 +110,47 @@ const { class: className, ...rest } = Astro.props;
     import { CustomEase } from "gsap/CustomEase";
     gsap.registerPlugin(CustomEase);
 
+    // NAVIGATION
+    // const nav = document.querySelector(".nav") as HTMLElement;
+    // const navWrapper = nav.querySelector(".nav__wrapper") as HTMLElement;
+    // MOBILE MENU
+    const mobileMenu = document.querySelector(".nav__list") as HTMLElement;
+    const mobileMenuLinks = mobileMenu.querySelectorAll(".nav__link") as NodeListOf<HTMLElement>;
+    // HAMBURGER MENU
     const hamburger = document.querySelector(".hamburger") as HTMLButtonElement;
     const hamburgerIcon = document.querySelector(".hamburger__icon") as HTMLElement;
     const hamburgerLine = hamburgerIcon.querySelector(".line-top-bottom") as HTMLElement;
     let isOpen: boolean = false;
 
-    hamburger.addEventListener("click", () => {
-        isOpen = !isOpen;
+    const mm = gsap.matchMedia();
 
-        const tl = gsap.timeline();
+    mm.add({ mobile: "(max-width: 768px)", desktop: "(min-width: 768px)" }, (context) => {
+        // set layout for mobile only
+        if (context.conditions && context.conditions.mobile) {
+            gsap.set(mobileMenu, {
+                position: "fixed",
+                xPercent: 100,
+            });
+            // hidden links for accessibility readers
+            gsap.set(mobileMenuLinks, {
+                autoAlpha: 0,
+            });
+            gsap.set(hamburger, {
+                position: "relative",
+                zIndex: 300,
+            });
+        }
 
+        if (context.conditions && context.conditions.desktop) {
+            gsap.set(hamburger, {
+                display: "none",
+            });
+        }
+    });
+    const tl = gsap.timeline();
+
+    // Hamburger animation
+    const animateHamburger = () => {
         tl.to(hamburgerIcon, {
             rotate: isOpen ? 45 : 0,
             ease: CustomEase.create("ease", "0.6, 0, 0.2, 0"),
@@ -103,5 +163,54 @@ const { class: className, ...rest } = Astro.props;
             },
             "<",
         );
+    };
+    // Menu animation
+    const menuTl = gsap.timeline({});
+
+    const animateMenu = () => {
+        if (mm.contexts[0].conditions && mm.contexts[0].conditions.mobile) {
+            menuTl
+                .to(mobileMenu, {
+                    xPercent: isOpen ? 0 : 100,
+                    ease: "power3.out",
+                    duration: 0.6,
+                })
+                .to(
+                    mobileMenuLinks,
+                    {
+                        autoAlpha: isOpen ? 1 : 0,
+                        stagger: isOpen ? 0.2 : 0,
+                    },
+                    isOpen ? ">-0.5" : "<",
+                );
+        }
+    };
+
+    // Hamburger click
+    hamburger.addEventListener("click", () => {
+        isOpen = !isOpen;
+
+        // body animation
+        if (isOpen) {
+            animateHamburger();
+            animateMenu();
+            document.body.classList.add("overlay--active");
+        } else {
+            animateHamburger();
+            animateMenu();
+            document.body.classList.remove("overlay--active");
+        }
+    });
+
+    // Overlay click
+    document.addEventListener("click", (e: MouseEvent) => {
+        if (mm.contexts[0].conditions && mm.contexts[0].conditions.mobile) {
+            if (isOpen && e.target === document.body) {
+                isOpen = !isOpen;
+                animateHamburger();
+                animateMenu();
+                document.body.classList.remove("overlay--active");
+            }
+        }
     });
 </script>
