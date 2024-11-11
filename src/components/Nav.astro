@@ -11,7 +11,7 @@ const { class: className, ...rest } = Astro.props;
 ---
 
 <nav class:list={["nav", className]} {...rest}>
-    <div class="wrapper nav__wrapper nav__wrapper--scrolling">
+    <div class="wrapper nav__wrapper">
         <div class="logo"></div>
         <div class="nav__list">
             <ul class="nav__links">
@@ -37,21 +37,38 @@ const { class: className, ...rest } = Astro.props;
     @use "../styles/abstracts" as *;
     .nav {
         position: fixed;
-        top: 0;
-        width: 100%;
+        top: rem(20);
+        left: 50%;
         z-index: 150;
-    }
-
-    .nav__wrapper {
+        translate: -50% 0;
+        width: calc(100% - rem(32));
+        max-width: 1280px;
         border: 2px solid color-mix(in oklab, var(--clr-indigo-700) 20%, transparent);
+        background-color: var(--clr-bg);
         box-shadow: var(--clr-box-shadow);
         border-radius: var(--bdr-radius);
         padding: var(--spc-sm) var(--spc-md);
+        transition:
+            max-width 0.3s,
+            width 0.3s,
+            top 0.3s,
+            margin-inline 0.3s;
+
+        @include breakpoint(tablet) {
+        }
+    }
+
+    .nav--scrolling {
+        margin: 0;
+        max-width: 100%;
+        width: 100%;
+        top: 0;
+        border-radius: 0;
+    }
+    .nav__wrapper {
         display: flex;
         justify-content: space-between;
-
         overflow: hidden;
-        background-color: var(--clr-bg);
     }
 
     .nav__list {
@@ -68,7 +85,7 @@ const { class: className, ...rest } = Astro.props;
         // glassmorphism
         backdrop-filter: blur(10px);
         background-color: color-mix(in oklab, var(--clr-stone-950) 70%, transparent);
-        border-radius: var(--bdr-radius) 0 0 var(--bdr-radius);
+        border-radius: var(--bdr-radius);
         border: 2px solid color-mix(in oklab, var(--clr-indigo-600) 20%, transparent);
         z-index: 200;
         @include breakpoint(tablet) {
@@ -85,13 +102,14 @@ const { class: className, ...rest } = Astro.props;
         flex-direction: column;
         gap: var(--spc-md);
         max-height: 70%;
-
         @include breakpoint(tablet) {
             flex-direction: row;
         }
     }
     .nav__link {
+        color: var(--clr-title);
         @include breakpoint(tablet) {
+            color: var(--clr-body);
             font-size: var(--fs-desktop-h6);
         }
     }
@@ -108,11 +126,12 @@ const { class: className, ...rest } = Astro.props;
 <script>
     import { gsap } from "gsap";
     import { CustomEase } from "gsap/CustomEase";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
     gsap.registerPlugin(CustomEase);
+    gsap.registerPlugin(ScrollTrigger);
 
     // NAVIGATION
-    // const nav = document.querySelector(".nav") as HTMLElement;
-    // const navWrapper = nav.querySelector(".nav__wrapper") as HTMLElement;
+    const nav = document.querySelector(".nav") as HTMLElement;
     // MOBILE MENU
     const mobileMenu = document.querySelector(".nav__list") as HTMLElement;
     const mobileMenuLinks = mobileMenu.querySelectorAll(".nav__link") as NodeListOf<HTMLElement>;
@@ -129,7 +148,7 @@ const { class: className, ...rest } = Astro.props;
         if (context.conditions && context.conditions.mobile) {
             gsap.set(mobileMenu, {
                 position: "fixed",
-                xPercent: 100,
+                xPercent: 106,
             });
             // hidden links for accessibility readers
             gsap.set(mobileMenuLinks, {
@@ -147,31 +166,32 @@ const { class: className, ...rest } = Astro.props;
             });
         }
     });
-    const tl = gsap.timeline();
+    const hamburgerTl = gsap.timeline();
+    const menuTl = gsap.timeline({});
 
     // Hamburger animation
     const animateHamburger = () => {
-        tl.to(hamburgerIcon, {
-            rotate: isOpen ? 45 : 0,
-            ease: CustomEase.create("ease", "0.6, 0, 0.2, 0"),
-        }).to(
-            hamburgerLine,
-            {
-                strokeDasharray: isOpen ? "20 200" : "12 63",
-                strokeDashoffset: isOpen ? -33 : 0,
+        hamburgerTl
+            .to(hamburgerIcon, {
+                rotate: isOpen ? 45 : 0,
                 ease: CustomEase.create("ease", "0.6, 0, 0.2, 0"),
-            },
-            "<",
-        );
+            })
+            .to(
+                hamburgerLine,
+                {
+                    strokeDasharray: isOpen ? "20 200" : "12 63",
+                    strokeDashoffset: isOpen ? -33 : 0,
+                    ease: CustomEase.create("ease", "0.6, 0, 0.2, 0"),
+                },
+                "<",
+            );
     };
     // Menu animation
-    const menuTl = gsap.timeline({});
-
     const animateMenu = () => {
         if (mm.contexts[0].conditions && mm.contexts[0].conditions.mobile) {
             menuTl
                 .to(mobileMenu, {
-                    xPercent: isOpen ? 0 : 100,
+                    xPercent: isOpen ? 0 : 106,
                     ease: "power3.out",
                     duration: 0.6,
                 })
@@ -212,5 +232,11 @@ const { class: className, ...rest } = Astro.props;
                 document.body.classList.remove("overlay--active");
             }
         }
+    });
+
+    ScrollTrigger.create({
+        start: "top -50",
+        onEnter: () => nav.classList.add("nav--scrolling"),
+        onLeaveBack: () => nav.classList.remove("nav--scrolling"),
     });
 </script>
